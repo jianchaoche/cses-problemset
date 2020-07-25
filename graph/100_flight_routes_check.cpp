@@ -14,7 +14,7 @@ const double epsilon=PI/180.0;
 typedef vector<string> vs;
 typedef long long ll;typedef unsigned int unit32;typedef unsigned long long ull;typedef vector<ll> vi;typedef vector<vector<ll> > vvi;typedef map<ll, ll> mii;typedef map<string, string> mss;typedef map<ll, string> mis;typedef map<string, ll> msi;typedef pair<ll, ll> pii;
 
-const ll maxn = 2e5 + 1;
+const ll maxn = 1e5 + 1;
 vvi adj(maxn);
 vvi adj2(maxn);
 bool vis[maxn];
@@ -42,12 +42,48 @@ void dfs2(ll u, vi &arr) {
 int main() {
   IOS
   ll n, m; cin>>n>>m;
+  
   for(int i = 0; i < m; ++i) {
-    char c1, c2; ll u1, u2;
-    cin>>c1>>u1>>c2>>u2;
-    u1 *= 2; u2 *= 2;
-
+    ll a, b; cin>>a>>b;
+    adj[a].push_back(b);
+    adj2[b].push_back(a);
   }
+  for(int i = 1; i <=n; ++i) 
+    dfs(i);
+  memset(vis, 0, sizeof(vis));
+  reverse(tp.begin(), tp.end());
+  vi ans(n + 1);
+  ll idx = 1;
+  for(auto n : tp) {
+    vi arr;
+    dfs2(n, arr);
+    if(arr.size()){
+      for(auto i : arr){
+        ans[i] = idx;
+      }
+      ++idx;
+    }
+  }
+  cout<<endl;
+  if(idx <= 2) {
+    cout<<"YES"; return 0;
+  }else {
+    cout<<"NO"<<endl;
+    for(int i = 1; i < ans.size(); ++i) {
+      if(ans[i] == idx - 1) {
+        cout<<i<<" ";
+        break;
+      }
+    }
+    for(int i = 1; i < ans.size(); ++i) {
+      if(ans[i] == 1) {
+        cout<<i;
+        break;
+      }
+    }
+    
+  }
+  return 0;
 }
 
 
