@@ -14,32 +14,22 @@ const double epsilon=PI/180.0;
 typedef vector<string> vs;
 typedef long long ll;typedef unsigned int unit32;typedef unsigned long long ull;typedef vector<ll> vi;typedef vector<vector<ll> > vvi;typedef map<ll, ll> mii;typedef map<string, string> mss;typedef map<ll, string> mis;typedef map<string, ll> msi;typedef pair<ll, ll> pii;
 
-const ll maxn = 1e5;
-bool dp[maxn][3][3];
-ll dfs(string &s, int left, int A, int B) {
-  if(left == s.size()) return true;
-  
-  if(s.size() - left == 3) {
-    return !(s[left] == s[left + 1] && s[left] == s[left + 2]);
-  }
-  
-  int a = dfs(s, left + 1, A + 1, B);
-  dfs(s, left + 1, A, B, )
-  if ((s[left] == 'A') + A < 3)
-    dfs(s, left + 1, A + (s[left] == 'A'), B + (s[left] == 'B'));
-  dfs(s, left + 2, A + (s[left] == 'A') + (s[left + 1] == 'A'), B + (s[left] == 'B') + (s[left + 1] == 'B'));
-  !(s[left] == s[left + 1] && s[left] == s[left + 2]) && dfs(s, left + 3, 0, 0);
-}
-
 int main() {
   IOS
   ll T; cin>>T;
   ll CASE = 1;
   while(T--) {
     ll N; cin>>N; string s; cin>>s;
-
-    return 0;
+    ll A = 0, B =0;
+    for(auto c :s) {
+      A += c == 'A'; B += c == 'B';
+    }
+    cout<<"Case "<<CASE++<<": ";
+    if(A / B >= 2 || B / A >= 2)cout<<"N";
+    else cout<<"Y";
+    cout<<endl;
   }
+  return 0;
 }
 
 
