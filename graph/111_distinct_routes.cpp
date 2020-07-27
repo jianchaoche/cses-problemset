@@ -14,14 +14,13 @@ const double epsilon=PI/180.0;
 typedef vector<string> vs;
 typedef long long ll;typedef unsigned int unit32;typedef unsigned long long ull;typedef vector<ll> vi;typedef vector<vector<ll> > vvi;typedef map<ll, ll> mii;typedef map<string, string> mss;typedef map<ll, string> mis;typedef map<string, ll> msi;typedef pair<ll, ll> pii;
 
-const ll maxn = 1001;
+const ll maxn = 2001;
 ll vis[maxn];
 vi path(maxn);
-vvi eu(maxn * 4);
-vvi edges(maxn * 4);
+vvi eu(maxn * 2);
+vvi edges(maxn * 2);
 vi ans;
-vector<map<ll, ll> > adj(maxn);
-ll dp[1<<20][20];
+
 ll M = 1e9 + 7;
 ll n;
 ll dfs(ll u, ll w) {
@@ -47,15 +46,23 @@ ll dfs(ll u, ll w) {
   return 0;
 }
 
-void dfs2(ll u) {
-  if(vis[u]) return;
-  vis[u] = 1;
+vi p;
+
+bool dfs(ll u) {
+  if(u == n - 1) return true;
   for(ll e : eu[u]) {
-    auto edge = edges[e];
-    if(edge[2]) {
-      dfs2(edge[1]);
+    auto &edge = edges[e];
+    ll v = edge[1], w = edge[2];
+    if(w == 0 && !vis[e] && (e & 1) == 0) {
+      edge[2] = 1;
+      vis[e] = 1;
+      if(dfs(v)) {
+        p.push_back(v);
+        return true;
+      }
     }
   }
+  return false;
 }
 
 int main() {
@@ -65,10 +72,9 @@ int main() {
   for(int i = 0; i < m; ++i) {
     ll a, b, c; cin>>a>>b; --a, --b;
     edges[i * 2] = {a, b, 1};
-    edges[i * 2 + 1] = {b, a, 1};
+    edges[i * 2 + 1] = {b, a, 0};
     eu[a].push_back(i * 2);
     eu[b].push_back(i * 2 + 1);
-    
   }
   ll f = 0;
   while(true) {
@@ -77,12 +83,19 @@ int main() {
     if(res == 0) break;
     f += res;
   }
-  memset(vis, 0, sizeof(vis));
-  dfs2(0);
   cout<<f<<endl;
-  for(int i = 0; i < 2 * m; i += 1) {
-    if(!edges[i][2] && vis[edges[i][0]] && !vis[edges[i][1]])
-      cout<<edges[i][0] + 1<<" "<<edges[i][1] + 1<<endl;
+
+  memset(vis, 0, sizeof(vis));
+  for(int i = 0; i < f; ++i) {
+    
+    dfs(0);
+    p.push_back(0);
+    reverse(p.begin(), p.end());
+    cout<<p.size()<<endl;
+    for(auto x : p)
+      cout<<x + 1<<" ";
+    cout<<endl;
+    p = {};
   }
   return 0;
 }
