@@ -17,29 +17,27 @@ typedef long long ll;typedef unsigned int unit32;typedef unsigned long long ull;
 int main() {
   IOS
   ll n, m; cin>>n>>m;
-  vector<map<ll, ll> > g(n+1);
+  vector<vector<pair<ll, ll> > > g(n+1);
   for(int i = 0; i < m; ++i) {
     ll a, b, c; cin>>a>>b>>c;
-    g[a][b] = g[a][b] == 0 ? c : min(g[a][b], c);
-    // g[b][a] = g[b][a] == 0 ? c : min(g[b][a], c);
+    g[a].push_back({b, c});
   }
-  // queue<pii> q;q.push({0, 1});
   vi v(n + 1);
-  vi ans(n + 1);
+  ll ans[n + 1];
+  memset(ans, 0x3f, sizeof(ans));
   ans[1] = 0;
   priority_queue<pii> pq;
+
   pq.push({0, 1});
   ll cnt = 0;
   while(pq.size()) {
     ll node = pq.top().second, price = pq.top().first; pq.pop();
-    if(!v[node]) {
-      v[node] = 1;
-      ans[node] = -price;
-      if(++cnt >= n) break;
-    }
+    if(-price > ans[node]) continue;
     for(auto it : g[node]) {
       ll next = it.first, p = it.second;
-      if(v[next]) continue;
+      if(next == 1) continue;
+      if((ans[next] < -price + p) ) continue;
+      ans[next] = -price + p;
       pq.push({ price - p, next});
     }
   }
